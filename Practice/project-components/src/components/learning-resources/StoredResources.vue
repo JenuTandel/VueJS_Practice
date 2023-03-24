@@ -3,6 +3,7 @@
     <learning-resource-list
       v-for="item in resources"
       :key="item.id"
+      :id="item.id"
       :title="item.title"
       :description="item.description"
       :link="item.link"
@@ -15,6 +16,13 @@ export default {
   components: {
     LearningResourceList,
   },
-  props: ["resources"],
+  // props: ["resources"],
+  inject: ["resources"],
 };
 </script>
+
+<style scoped>
+ul {
+  all: unset;
+}
+</style>
