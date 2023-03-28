@@ -111,7 +111,7 @@
 </template>
 
 <script>
-import RatingControl from './RatingControl.vue';
+import RatingControl from "./RatingControl.vue";
 
 export default {
   components: {
@@ -119,45 +119,45 @@ export default {
   },
   data() {
     return {
-      userName: '',
+      userName: "",
       userAge: null,
-      referrer: 'wom',
+      referrer: "wom",
       interest: [],
       how: null,
       confirm: false,
       rating: null,
-      userNameValidity: 'pending',
+      userNameValidity: "pending",
     };
   },
   methods: {
     submitForm() {
-      console.log('Username: ' + this.userName);
-      this.userName = '';
-      console.log('User age:');
+      console.log("Username: " + this.userName);
+      this.userName = "";
+      console.log("User age:");
       console.log(this.userAge + 5);
       console.log(this.$refs.ageInput.value + 5);
       console.log(31);
       this.userAge = null;
-      console.log('Referrer: ' + this.referrer);
-      this.referrer = 'wom';
-      console.log('Checkboxes');
+      console.log("Referrer: " + this.referrer);
+      this.referrer = "wom";
+      console.log("Checkboxes");
       console.log(this.interest);
-      console.log('Radio buttons');
+      console.log("Radio buttons");
       console.log(this.how);
       this.interest = [];
       this.how = null;
-      console.log('Confirm?');
+      console.log("Confirm?");
       console.log(this.confirm);
       this.confirm = false;
-      console.log('Rating');
+      console.log("Rating");
       console.log(this.rating);
       this.rating = null;
     },
     validateInput() {
-      if (this.userName === '') {
-        this.userNameValidity = 'invalid';
+      if (this.userName === "") {
+        this.userNameValidity = "invalid";
       } else {
-        this.userNameValidity = 'valid';
+        this.userNameValidity = "valid";
       }
     },
   },
@@ -207,15 +207,15 @@ select {
   width: auto;
 }
 
-input[type='checkbox'],
-input[type='radio'] {
+input[type="checkbox"],
+input[type="radio"] {
   display: inline-block;
   width: auto;
   margin-right: 1rem;
 }
 
-input[type='checkbox'] + label,
-input[type='radio'] + label {
+input[type="checkbox"] + label,
+input[type="radio"] + label {
   font-weight: normal;
 }
 
