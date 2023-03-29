@@ -1,0 +1,3 @@
+<template>
+  <h2 class="text-danger">Page Not Found</h2>
+</template>
