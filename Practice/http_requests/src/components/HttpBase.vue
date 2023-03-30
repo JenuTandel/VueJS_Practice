@@ -52,6 +52,7 @@ export default {
               skill: response[id].skill,
             });
             this.users = users;
+            console.log(this.users);
           }
         })
         .catch((error) => {
