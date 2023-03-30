@@ -29,7 +29,12 @@ body {
   height: 100%;
   width: 100%;
 }
-a.active {
+ul,
+li {
+  list-style-type: none;
+}
+a.active,
+a:hover {
   color: black;
   background-color: pink;
 }

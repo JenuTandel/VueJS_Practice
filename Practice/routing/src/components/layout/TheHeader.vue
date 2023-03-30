@@ -1,5 +1,5 @@
 <template>
-  <ul class="nav nav-underline bg-light">
+  <ul class="nav nav-underline">
     <li class="nav-item">
       <router-link to="/home" class="nav-link">Home</router-link>
     </li>
@@ -12,4 +12,11 @@
   </ul>
 </template>
 <script></script>
-<style scoped></style>
+<style scoped>
+.nav {
+  background-color: #222d48;
+}
+.nav-link {
+  color: white;
+}
+</style>

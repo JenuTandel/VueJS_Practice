@@ -1,0 +1,18 @@
+{
+  "employeeData": [
+    {
+      "empName": "Jinal",
+      "gender": "female",
+      "doj": "2023-01-12",
+      "empsalary": 800001,
+      "id": 1
+    },
+    {
+      "empName": "Vishwani",
+      "gender": "female",
+      "doj": "2023-01-05",
+      "empsalary": 564444,
+      "id": 2
+    }
+  ]
+}

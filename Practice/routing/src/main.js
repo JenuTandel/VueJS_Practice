@@ -4,13 +4,15 @@ import { createRouter, createWebHistory } from "vue-router";
 import App from "./App.vue";
 import TheHome from "./components/TheHome";
 import TheEmployee from "./components/employee/TheEmployee";
-import EmployeeDetails from "./components/employee/TheEmployee";
+import EmployeeDetails from "./components/employee/EmployeeDetails";
 import EmployeeList from "./components/employee/EmployeeList";
 import EmployeeForm from "./components/employee/EmployeeForm";
 import TheContact from "./components/TheContact";
 import PageNotFound from "./components/PageNotFound";
 import EmployeeFooter from "./components/layout/EmployeeFooter";
 import TheFooter from "./components/layout/TheFooter";
+import BaseCard from "./components/UI/BaseCard";
+import BaseTable from "./components/UI/BaseTable";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -39,7 +41,11 @@ const router = createRouter({
           component: EmployeeForm,
         },
         {
-          path: "/employee-details",
+          path: "/employee/employee-form/:empid",
+          component: EmployeeForm,
+        },
+        {
+          path: "/employee/employee-details",
           component: EmployeeDetails,
         },
       ],
@@ -50,8 +56,10 @@ const router = createRouter({
     },
   ],
   linkActiveClass: "active",
-  linkExactActiveClass: "bg-warning",
+  linkExactActiveClass: "bg-success",
 });
 const app = createApp(App);
+app.component("base-card", BaseCard);
+app.component("base-table", BaseTable);
 app.use(router);
 app.mount("#app");
