@@ -1,6 +1,6 @@
 <template>
   <div class="mt-3">
-    <router-link to="/employee/employee-list" class="btn btn-primary me-3"
+    <router-link to="employee-list" class="btn btn-primary me-3"
       >Employee List</router-link
     >
     <!-- <router-link to="/employee/employee-form" class="btn btn-primary"
@@ -16,10 +16,12 @@
 </template>
 <script>
 export default {
+  // props: ["empid"],
   computed: {
     employeeForm() {
       return {
-        name: "/employee/employee-form",
+        name: "employee-form",
+        // params: { empid: "1" },
         query: { sort: "asc" },
       };
     },

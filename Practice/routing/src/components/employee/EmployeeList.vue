@@ -21,7 +21,7 @@
             <button
               type="button"
               class="btn btn-success me-2"
-              @click="$router.push(`/employee/employee-form/` + emp.id)"
+              @click="$router.push(`employee-form/` + emp.id)"
             >
               Edit
             </button>
@@ -37,7 +37,7 @@
               class="btn btn-info"
               @click="
                 $router.push({
-                  path: `/employee/employee-details`,
+                  path: `employee-details`,
                   query: {
                     name: emp.empName,
                     gender: emp.gender,
