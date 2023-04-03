@@ -1,6 +1,8 @@
 <template>
   <div class="d-flex flex-column align-items-center">
+    <!-- start: card -->
     <div class="card mt-3">
+      <!-- start: card body -->
       <ul class="card-body">
         <div class="d-flex justify-content-between">
           <li><span class="fw-bold">Firstname: </span>{{ firstname }}</li>
@@ -42,7 +44,9 @@
         <li><span class="fw-bold">Gender: </span>{{ gender }}</li>
         <li><span class="fw-bold">Skill: </span>{{ skill }}</li>
       </ul>
+      <!-- end: card body -->
     </div>
+    <!-- end: card -->
   </div>
 </template>
 <script>

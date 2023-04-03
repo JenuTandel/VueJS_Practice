@@ -1,5 +1,6 @@
 <template>
   <div class="d-flex justify-content-center">
+    <!-- start: employeeForm -->
     <form class="employee-form p-3 border rounded" @submit.prevent="onSave">
       <h2>{{ title }} Employee</h2>
       <input
@@ -47,6 +48,7 @@
       <button type="submit" class="btn btn-success me-3">Save</button>
       <button type="reset" class="btn btn-light">Reset</button>
     </form>
+    <!-- end: employeeForm -->
   </div>
 </template>
 <script>
@@ -79,6 +81,9 @@ export default {
     };
   },
   methods: {
+    /**
+     * @description 'when click on the save button'
+     */
     onSave() {
       if (this.empId) {
         console.log(this.empId);
@@ -102,6 +107,9 @@ export default {
           .catch((err) => console.log(err));
       }
     },
+    /**
+     * @description 'get particular employee data'
+     */
     getEmployeeById() {
       axios
         .get(`http://localhost:3000/employeeData/${this.empId}`)
@@ -118,6 +126,9 @@ export default {
           console.log(err);
         });
     },
+    /**
+     * @description 'update employee data'
+     */
     updateEmployeeData() {
       axios
         .patch(`http://localhost:3000/employeeData/${this.empId}`, {

@@ -1,6 +1,9 @@
 <template>
+  <!-- start: user form -->
   <user-form :updatedUser="updatedUser"></user-form>
+  <!-- end: user form -->
   <h3 class="mb-3 text-center mt-3" v-if="users.length !== 0">User List</h3>
+  <!-- start: user list data -->
   <user-list
     v-for="user in users"
     :key="user.id"
@@ -12,6 +15,7 @@
     @deleteUser="deleteUser"
     @updateUser="getDataById"
   ></user-list>
+  <!-- end: user list data -->
 </template>
 <script>
 import UserForm from "./UserForm.vue";
@@ -26,12 +30,18 @@ export default {
     };
   },
   watch: {},
+  /**
+   * @description 'provide method to child (UserForm.vue)'
+   */
   provide() {
     return {
       getUserData: this.getData,
     };
   },
   methods: {
+    /**
+     * @description 'get data from database'
+     */
     getData() {
       axios
         .get(
@@ -59,6 +69,10 @@ export default {
           console.log(error);
         });
     },
+    /**
+     * @description 'delete user'
+     * @param userId
+     */
     deleteUser(userId) {
       axios
         .delete(
@@ -73,6 +87,10 @@ export default {
           console.log(error);
         });
     },
+    /**
+     * @description 'get particular user details'
+     * @param userId
+     */
     getDataById(userId) {
       axios
         .get(

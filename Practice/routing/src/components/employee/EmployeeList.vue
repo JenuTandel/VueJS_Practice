@@ -72,11 +72,18 @@ export default {
     };
   },
   methods: {
+    /**
+     * @description 'get employee list'
+     */
     getEmployeeList() {
       axios.get("http://localhost:3000/employeeData").then((res) => {
         this.employeeData = res.data;
       });
     },
+    /**
+     * @description 'delete employee'
+     * @param empId
+     */
     deleteEmployee(empId) {
       axios
         .delete(`http://localhost:3000/employeeData/${empId}`)

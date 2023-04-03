@@ -8,6 +8,10 @@ Vue.createApp({
     };
   },
   methods: {
+    /**
+     * @description 'generate random number'
+     * @returns Math.random()
+     */
     generateRandomNum() {
       return Math.random();
     },

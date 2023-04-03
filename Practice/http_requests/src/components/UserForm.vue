@@ -1,5 +1,6 @@
 <template>
   <div class="d-flex justify-content-center">
+    <!-- start: userForm -->
     <form @submit.prevent="onSubmit" class="userform p-4 border mt-3">
       <h3 class="text-center mb-3">User Form</h3>
       <input
@@ -70,6 +71,7 @@
       </button>
       <p class="text-danger mt-3">{{ error }}</p>
     </form>
+    <!-- end: userForm -->
   </div>
 </template>
 <script>
@@ -78,6 +80,9 @@ export default {
   inject: ["getUserData"],
   props: ["updatedUser"],
   watch: {
+    /**
+     * @description 'watch updated user data'
+     */
     updatedUser() {
       this.userid = this.updatedUser.userId;
       this.enteredFirstName = this.updatedUser.data.firstname;
@@ -98,34 +103,13 @@ export default {
     };
   },
   methods: {
+    /**
+     * @description 'When submit button is called'
+     */
     onSubmit() {
-      console.log(this.userid);
+      // console.log(this.userid);
       if (this.userid) {
-        axios
-          .patch(
-            `https://vue-http-requests-9c690-default-rtdb.firebaseio.com/user/${this.userid}.json`,
-            {
-              firstname: this.enteredFirstName,
-              lastname: this.enteredLastName,
-              gender: this.selectedGender,
-              skill: this.selectedSkill,
-            }
-          )
-          .then((response) => {
-            console.log(response);
-            this.isLoading = false;
-            (this.enteredFirstName = ""),
-              (this.enteredLastName = ""),
-              (this.selectedGender = ""),
-              (this.selectedSkill = []);
-            this.error = "";
-            this.userid = null;
-            this.getUserData();
-          })
-          .catch((error) => {
-            this.isLoading = false;
-            this.error = error.message;
-          });
+        this.updateUserData();
       } else {
         this.isLoading = true;
         if (
@@ -167,6 +151,39 @@ export default {
         }
       }
     },
+    /**
+     * @description 'update user data'
+     */
+    updateUserData() {
+      axios
+        .patch(
+          `https://vue-http-requests-9c690-default-rtdb.firebaseio.com/user/${this.userid}.json`,
+          {
+            firstname: this.enteredFirstName,
+            lastname: this.enteredLastName,
+            gender: this.selectedGender,
+            skill: this.selectedSkill,
+          }
+        )
+        .then((response) => {
+          console.log(response);
+          this.isLoading = false;
+          (this.enteredFirstName = ""),
+            (this.enteredLastName = ""),
+            (this.selectedGender = ""),
+            (this.selectedSkill = []);
+          this.error = "";
+          this.userid = null;
+          this.getUserData();
+        })
+        .catch((error) => {
+          this.isLoading = false;
+          this.error = error.message;
+        });
+    },
+  },
+  mounted() {
+    console.log(this.updatedUser);
   },
 };
 </script>
