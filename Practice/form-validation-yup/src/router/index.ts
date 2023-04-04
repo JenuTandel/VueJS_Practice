@@ -4,6 +4,10 @@ import HomeView from "../views/HomeView.vue";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
+    redirect: "/home",
+  },
+  {
+    path: "/home",
     name: "home",
     component: HomeView,
   },
@@ -17,8 +21,13 @@ const routes: Array<RouteRecordRaw> = [
       import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
   },
   {
-    path: "/form",
-    component: () => import("../components/TheForm.vue"),
+    path: "/registration",
+    component: () => import("../components/RegistrationForm.vue"),
+  },
+  {
+    name: "login",
+    path: "/login",
+    component: () => import("../components/LoginForm.vue"),
   },
 ];
 
