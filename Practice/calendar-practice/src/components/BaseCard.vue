@@ -1,6 +1,6 @@
 <template>
-  <ul>
+  <div>
     <slot></slot>
-  </ul>
+  </div>
 </template>
 <style scoped></style>

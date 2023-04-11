@@ -1,7 +1,9 @@
 <template>
   <div class="d-flex flex-column h-100">
     <!-- start: header -->
-    <header class="w-100 d-flex align-items-center p-2 border-bottom">
+    <header
+      class="w-100 d-flex align-items-center p-2 border-bottom position-relative"
+    >
       <span class="icon icon-menu fs-4 mx-3"></span>
       <!-- logo -->
       <figure class="img-wrapper me-3">
@@ -25,10 +27,12 @@
             class="icon icon-chevron_right fw-semibold mx-2"
             @click="onNext"
           ></span>
-          <span class="month-year ms-3"
-            >{{ month[currentMonth] }} {{ currentYear }}</span
-          >
-          <span class="icon icon-arrow_drop_down"></span>
+          <div>
+            <span class="month-year ms-3"
+              >{{ month[currentMonth] }} {{ currentYear }}</span
+            >
+            <span class="icon icon-arrow_drop_down"></span>
+          </div>
         </div>
         <div class="header-right-wrapper d-flex align-items-center">
           <span class="icon icon-search fw-semibold mx-2"></span>
@@ -74,11 +78,53 @@
           <img src="../src/assets/logo.png" />
         </div>
       </div>
+      <!-- plus button -->
+      <div
+        class="plus-icon-wrapper d-flex align-items-center justify-content-center bg-white shadow-sm position-absolute"
+        @click="onPlus"
+      >
+        <svg width="36" height="36" viewBox="0 0 36 36">
+          <path fill="#34A853" d="M16 16v14h4V20z"></path>
+          <path fill="#4285F4" d="M30 16H20l-4 4h14z"></path>
+          <path fill="#FBBC05" d="M6 16v4h10l4-4z"></path>
+          <path fill="#EA4335" d="M20 16V6h-4v14z"></path>
+          <path fill="none" d="M0 0h36v36H0z"></path>
+        </svg>
+      </div>
     </header>
     <!-- end:header -->
+
+    <!-- start: task dialog -->
+    <div
+      class="task d-flex flex-column bg-white shadow position-absolute top-50 start-50 translate-middle"
+      v-if="taskVisibility"
+    >
+      <form class="border p-4" @submit.prevent="onSubmit">
+        <h4 class="mb-3">Add Task</h4>
+        <input
+          type="text"
+          class="mb-3 form-control"
+          placeholder="Add Title"
+          v-model="enteredTitle"
+        />
+        <input
+          type="datetime-local"
+          class="mb-3 form-control"
+          v-model="selectedDatetime"
+        />
+        <textarea
+          rows="3"
+          class="mb-3 form-control"
+          placeholder="Add Description"
+          v-model="enteredDescription"
+        ></textarea>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </form>
+    </div>
+    <!-- end: task dialog -->
     <!-- start: monthwise -->
     <section v-if="isMonth" class="h-100">
-      <div class="row days border-bottom gx-0">
+      <div class="row days mt-2 gx-0">
         <div
           class="col border-end d-flex justify-content-center"
           v-for="i in weekDays"
@@ -90,14 +136,26 @@
       <div class="dates w-100 d-flex flex-wrap h-100">
         <div
           class="date border-end border-bottom d-flex justify-content-center"
-          v-for="date in dates"
+          v-for="date in prevMonthDates"
           :key="date"
-          :class="{ 'bg-primary': date === currentDate }"
         >
-          <p class="mt-2">
+          <p class="mt-2 text-secondary">
             {{ date }}
           </p>
         </div>
+        <CalendarDates
+          v-for="date in dates"
+          :key="date"
+          :date="date"
+          :month="month"
+          :currentMonth="currentMonth"
+          :currentYear="currentYear"
+          :currentDate="currentDate"
+          :enteredTitle="enteredTitle"
+          :enteredDescription="enteredDescription"
+          :selectedDatetime="selectedDatetime"
+        >
+        </CalendarDates>
       </div>
     </section>
     <!-- end: monthwise -->
@@ -149,12 +207,21 @@
 </template>
 
 <script>
+import CalendarDates from "./components/CalendarDates.vue";
+import emitter from "./components/emit";
+
 export default {
   name: "App",
+  components: { CalendarDates },
 
   data() {
     return {
+      enteredTitle: "",
+      selectedDatetime: "",
+      enteredDescription: "",
+      prevMonthDates: [],
       dropdownVisibility: false,
+      taskVisibility: false,
       isMonth: true,
       title: "Month",
       weekDays: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"],
@@ -172,13 +239,11 @@ export default {
         "November",
         "December",
       ],
-      dates: [
-        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-        21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
-      ],
+      dates: [],
       currentYear: new Date().getFullYear(),
       currentMonth: new Date().getMonth(),
       currentDate: new Date().getDate(),
+
       time: [
         "GMT+00",
         "1 AM",
@@ -208,6 +273,43 @@ export default {
     };
   },
   methods: {
+    renderCalendar() {
+      // Get last day of month
+      let lastDateOfMonth = new Date(
+        this.currentYear,
+        this.currentMonth + 1,
+        0
+      ).getDate();
+      let date = [];
+      for (let i = 1; i <= lastDateOfMonth; i++) {
+        date.push(i);
+      }
+      this.dates = date;
+
+      //Get last date of previous month
+      let lastDateOfPrevMonth = new Date(
+        this.currentYear,
+        this.currentMonth,
+        0
+      ).getDate();
+      // console.log(lastDateOfPrevMonth);
+
+      // Get first day of month
+      let firstDayOfMonth = new Date(
+        this.currentYear,
+        this.currentMonth,
+        1
+      ).getDay();
+      console.log(firstDayOfMonth);
+      let extraDates = [];
+      for (let i = firstDayOfMonth; i > 0; i--) {
+        extraDates.unshift(lastDateOfPrevMonth);
+        lastDateOfPrevMonth--;
+      }
+      this.prevMonthDates = extraDates;
+      // console.log(this.prevMonthDates);
+      // this.dates.unshift(...extraDates);
+    },
     onSelectType() {
       this.dropdownVisibility = !this.dropdownVisibility;
     },
@@ -224,23 +326,36 @@ export default {
     onToday() {
       (this.currentMonth = new Date().getMonth()),
         (this.currentYear = new Date().getFullYear());
+      this.renderCalendar();
     },
     onPrev() {
       this.currentMonth--;
       if (this.currentMonth == -1) {
         this.currentYear--;
         this.currentMonth = 11;
-        this.onPrev;
       }
+      this.renderCalendar();
     },
     onNext() {
       this.currentMonth++;
       if (this.currentMonth == 12) {
         this.currentYear++;
         this.currentMonth = 0;
-        this.onNext;
       }
+      this.renderCalendar();
     },
+    onPlus() {
+      this.taskVisibility = !this.taskVisibility;
+    },
+    onSubmit() {
+      this.taskVisibility = false;
+      let a = this.selectedDatetime.split("T")[0].split("-")[2];
+      console.log("asas");
+      emitter.emit("onSave", a);
+    },
+  },
+  created() {
+    this.renderCalendar();
   },
 };
 </script>
@@ -339,5 +454,16 @@ img {
   height: 40px;
   width: 40px;
   border-radius: 50%;
+}
+.plus-icon-wrapper {
+  border-radius: 50%;
+  height: 56px;
+  width: 56px;
+  top: 70px;
+  left: 20px;
+}
+.task {
+  width: 300px;
+  z-index: 100;
 }
 </style>
