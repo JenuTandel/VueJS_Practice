@@ -147,6 +147,7 @@
           v-for="date in dates"
           :key="date"
           :date="date"
+          :task="task[date]"
           :month="month"
           :currentMonth="currentMonth"
           :currentYear="currentYear"
@@ -208,7 +209,7 @@
 
 <script>
 import CalendarDates from "./components/CalendarDates.vue";
-import emitter from "./components/emit";
+// import emitter from "./components/emit";
 
 export default {
   name: "App",
@@ -216,6 +217,8 @@ export default {
 
   data() {
     return {
+      mymonth: "",
+      task: {},
       enteredTitle: "",
       selectedDatetime: "",
       enteredDescription: "",
@@ -292,7 +295,6 @@ export default {
         this.currentMonth,
         0
       ).getDate();
-      // console.log(lastDateOfPrevMonth);
 
       // Get first day of month
       let firstDayOfMonth = new Date(
@@ -300,15 +302,13 @@ export default {
         this.currentMonth,
         1
       ).getDay();
-      console.log(firstDayOfMonth);
+
       let extraDates = [];
       for (let i = firstDayOfMonth; i > 0; i--) {
         extraDates.unshift(lastDateOfPrevMonth);
         lastDateOfPrevMonth--;
       }
       this.prevMonthDates = extraDates;
-      // console.log(this.prevMonthDates);
-      // this.dates.unshift(...extraDates);
     },
     onSelectType() {
       this.dropdownVisibility = !this.dropdownVisibility;
@@ -349,9 +349,15 @@ export default {
     },
     onSubmit() {
       this.taskVisibility = false;
-      let a = this.selectedDatetime.split("T")[0].split("-")[2];
-      console.log("asas");
-      emitter.emit("onSave", a);
+      let d = this.selectedDatetime.split("T")[0].split("-")[2];
+      let m = this.selectedDatetime.split("T")[0].split("-")[1];
+      let y = this.selectedDatetime.split("T")[0].split("-")[0];
+      console.log(y);
+      this.task[d] = {};
+      this.task[d].title = this.enteredTitle;
+      this.task[d].month = m - 1;
+      this.task[d].year = y;
+      this.renderCalendar();
     },
   },
   created() {

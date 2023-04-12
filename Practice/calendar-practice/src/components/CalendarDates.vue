@@ -12,36 +12,57 @@
       <span v-if="date === 1">{{ month[currentMonth].slice(0, 3) }}</span>
       {{ date }}
     </p>
-    <p
+    <!-- <p
       v-if="
         taskDate.find((d) => d === date) &&
         taskMonth.find((m) => m === currentMonth) &&
-        taskYear.find((y) => y === currentYear) &&
-        task
+        taskYear.find((y) => y === currentYear)
       "
     >
-      {{ enteredTitle || task }}
+      {{ task.a }}
+    </p> -->
+    <p v-if="currentMonth == m && currentYear == y">
+      {{ task1 }}
     </p>
   </div>
 </template>
 
 <script>
-import emitter from "./emit";
+// import emitter from "./emit";
 export default {
   name: "CalendarDates",
   data() {
     return {
+      task1: "",
+      m: "",
+      y: "",
+      onsave: false,
       activeYear: new Date().getFullYear(),
       activeMonth: new Date().getMonth(),
       activeDate: new Date().getDate(),
-      task: "My Task",
+      // task: "My Task",
       isTask: false,
       taskDate: [],
       taskMonth: [],
       taskYear: [],
     };
   },
+  emits: ["addTask"],
+  watch: {
+    task(val) {
+      this.task1 = val.title;
+      this.m = val.month;
+      this.y = val.year;
+    },
+    currentMonth(val) {
+      return val;
+    },
+    currentYear(val) {
+      return val;
+    },
+  },
   props: [
+    "task",
     "date",
     "month",
     "currentMonth",
@@ -51,6 +72,7 @@ export default {
     "enteredDescription",
     "selectedDatetime",
   ],
+
   methods: {
     addTask(d) {
       // if (d && this.currentMonth && this.currentYear) {
@@ -58,21 +80,22 @@ export default {
       this.taskMonth.push(this.currentMonth);
       this.taskYear.push(this.currentYear);
       // }
-      console.log(this.taskDate);
+      // console.log(this.taskDate);
       // console.log(this.taskMonth);
       // console.log(this.taskYear);
-      console.log(this.selectedDatetime);
+      // console.log(this.selectedDatetime);
     },
   },
-  created() {
-    emitter.on("onSave", (e) => {
-      // console.log(e);
-      this.addTask(e);
-    });
-  },
-  unmounted() {
-    emitter.off("onSave");
-  },
+  created() {},
+  // created() {
+  //   emitter.on("onSave", (e) => {
+  //     this.addTask(e);
+  //   });
+  //   this.onsave = true;
+  // },
+  // unmounted() {
+  //   emitter.off("onSave");
+  // },
 };
 </script>
 
