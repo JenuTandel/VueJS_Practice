@@ -5,7 +5,7 @@
     </base-card>
     <div class="d-flex">
       <base-button class="outline me-2">Refresh</base-button>
-      <base-button link to="/register">Register</base-button>
+      <base-button link to="/register" v-if="!isCoach">Register</base-button>
     </div>
     <ul v-if="hasCoaches">
       <coach-items
@@ -40,6 +40,9 @@ export default {
     CoachFilter,
   },
   computed: {
+    isCoach() {
+      return this.$store.getters["coaches/isCoach"];
+    },
     //get coaches
     filteredCoaches() {
       const coaches = this.$store.getters["coaches/coaches"];
@@ -59,6 +62,7 @@ export default {
         return false;
       });
     },
+
     //data is found or not
     hasCoaches() {
       return this.$store.getters["coaches/hasCoaches"];

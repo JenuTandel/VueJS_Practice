@@ -5,12 +5,17 @@ import requestsModule from "./modules/requests";
 const store = createStore({
   state() {
     return {
-      a: "Hello",
+      userId: "c3",
     };
   },
   modules: {
     coaches: coachesModule,
     requests: requestsModule,
+  },
+  getters: {
+    userId(state) {
+      return state.userId;
+    },
   },
 });
 
