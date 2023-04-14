@@ -1,13 +1,21 @@
 <template>
+  <base-dialog :show="!!error" title="Error" @close="handleError">
+    <p>{{ error }}</p>
+  </base-dialog>
   <section class="p-3 h-100 d-flex flex-column align-items-center">
     <base-card>
       <coach-filter @change-filter="setFilter"></coach-filter>
     </base-card>
     <div class="d-flex">
-      <base-button class="outline me-2">Refresh</base-button>
+      <base-button class="outline me-2" @click="loadCoaches"
+        >Refresh</base-button
+      >
       <base-button link to="/register" v-if="!isCoach">Register</base-button>
     </div>
-    <ul v-if="hasCoaches">
+    <div v-if="isLoading">
+      <base-spinner></base-spinner>
+    </div>
+    <ul v-else-if="hasCoaches">
       <coach-items
         v-for="coach in filteredCoaches"
         :key="coach.id"
@@ -27,6 +35,8 @@ import CoachFilter from "./CoachFilter.vue";
 export default {
   data() {
     return {
+      error: null,
+      isLoading: false,
       activeFilters: {
         frontend: true,
         backend: true,
@@ -46,6 +56,7 @@ export default {
     //get coaches
     filteredCoaches() {
       const coaches = this.$store.getters["coaches/coaches"];
+      console.log(coaches);
       return coaches.filter((coach) => {
         if (this.activeFilters.frontend && coach.areas.includes("frontend")) {
           return true;
@@ -65,13 +76,28 @@ export default {
 
     //data is found or not
     hasCoaches() {
-      return this.$store.getters["coaches/hasCoaches"];
+      return !this.isLoading && this.$store.getters["coaches/hasCoaches"];
     },
   },
   methods: {
     setFilter(updateFilters) {
       this.activeFilters = updateFilters;
     },
+    async loadCoaches() {
+      this.isLoading = true;
+      try {
+        await this.$store.dispatch("coaches/loadCoaches");
+      } catch (err) {
+        this.error = err.message;
+      }
+      this.isLoading = false;
+    },
+    handleError() {
+      this.error = null;
+    },
+  },
+  created() {
+    this.loadCoaches();
   },
 };
 </script>
