@@ -9,13 +9,35 @@
       <li class="nav-item">
         <router-link to="/coaches" class="nav-link">All Coaches</router-link>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" v-if="isLoggedIn">
         <router-link to="/requests" class="nav-link">Requests</router-link>
+      </li>
+      <li class="nav-item" v-else>
+        <router-link to="/auth" class="nav-link">Login</router-link>
+      </li>
+      <li class="nav-item" v-if="isLoggedIn">
+        <base-button @click="isLogout">Logout</base-button>
       </li>
     </ul>
   </div>
 </template>
 
+<script>
+export default {
+  name: "TheHeader",
+  computed: {
+    isLoggedIn() {
+      return this.$store.getters.isAuthenticated;
+    },
+  },
+  methods: {
+    isLogout() {
+      this.$store.dispatch("logout");
+      this.$router.replace("/coaches");
+    },
+  },
+};
+</script>
 <style scoped>
 a {
   color: white;

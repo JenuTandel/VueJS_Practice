@@ -9,8 +9,10 @@ export default {
       hourlyRate: payload.rate,
       areas: payload.areas,
     };
+    const token = context.rootGetters.token;
     const response = await axios.put(
-      `https://for-a-coach-default-rtdb.firebaseio.com/coaches/${userId}.json`,
+      `https://for-a-coach-default-rtdb.firebaseio.com/coaches/${userId}.json?auth=` +
+        token,
       coachData
     );
     // const responseData = await response.json();

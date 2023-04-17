@@ -12,7 +12,6 @@ export default {
         newRequest
       )
       .then((response) => {
-        console.log(response.data);
         newRequest.id = response.data.name;
         newRequest.coachId = payload.coachId;
       })
@@ -24,9 +23,11 @@ export default {
   async fetchRequests(context) {
     const coachId = context.rootGetters.userId;
     const requests = [];
+    const token = context.rootGetters.token;
     await axios
       .get(
-        `https://for-a-coach-default-rtdb.firebaseio.com/requests/${coachId}.json`
+        `https://for-a-coach-default-rtdb.firebaseio.com/requests/${coachId}.json?auth=` +
+          token
       )
       .then((res) => {
         return res.data;
