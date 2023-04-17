@@ -1,33 +1,35 @@
 <template>
-  <base-dialog :show="!!error" title="Error" @close="handleError">
-    <p>{{ error }}</p>
-  </base-dialog>
-  <section class="p-3 h-100 d-flex flex-column align-items-center">
-    <base-card>
-      <coach-filter @change-filter="setFilter"></coach-filter>
-    </base-card>
-    <div class="d-flex">
-      <base-button class="outline me-2" @click="loadCoaches"
-        >Refresh</base-button
-      >
-      <base-button link to="/register" v-if="!isCoach">Register</base-button>
-    </div>
-    <div v-if="isLoading">
-      <base-spinner></base-spinner>
-    </div>
-    <ul v-else-if="hasCoaches">
-      <coach-items
-        v-for="coach in filteredCoaches"
-        :key="coach.id"
-        :id="coach.id"
-        :firstName="coach.firstName"
-        :lastName="coach.lastName"
-        :areas="coach.areas"
-        :rate="coach.hourlyRate"
-      ></coach-items>
-    </ul>
-    <h3 v-else class="text-danger">No coaches found.</h3>
-  </section>
+  <div>
+    <base-dialog :show="!!error" title="Error" @close="handleError">
+      <p>{{ error }}</p>
+    </base-dialog>
+    <section class="p-3 h-100 d-flex flex-column align-items-center">
+      <base-card>
+        <coach-filter @change-filter="setFilter"></coach-filter>
+      </base-card>
+      <div class="d-flex">
+        <base-button class="outline me-2" @click="loadCoaches(true)"
+          >Refresh</base-button
+        >
+        <base-button link to="/register" v-if="!isCoach">Register</base-button>
+      </div>
+      <div v-if="isLoading">
+        <base-spinner></base-spinner>
+      </div>
+      <ul v-else-if="hasCoaches">
+        <coach-items
+          v-for="coach in filteredCoaches"
+          :key="coach.id"
+          :id="coach.id"
+          :firstName="coach.firstName"
+          :lastName="coach.lastName"
+          :areas="coach.areas"
+          :rate="coach.hourlyRate"
+        ></coach-items>
+      </ul>
+      <h3 v-else class="text-danger">No coaches found.</h3>
+    </section>
+  </div>
 </template>
 <script>
 import CoachItems from "./CoachItems.vue";
@@ -53,10 +55,10 @@ export default {
     isCoach() {
       return this.$store.getters["coaches/isCoach"];
     },
+
     //get coaches
     filteredCoaches() {
       const coaches = this.$store.getters["coaches/coaches"];
-      console.log(coaches);
       return coaches.filter((coach) => {
         if (this.activeFilters.frontend && coach.areas.includes("frontend")) {
           return true;
@@ -83,10 +85,12 @@ export default {
     setFilter(updateFilters) {
       this.activeFilters = updateFilters;
     },
-    async loadCoaches() {
+    async loadCoaches(refresh) {
       this.isLoading = true;
       try {
-        await this.$store.dispatch("coaches/loadCoaches");
+        await this.$store.dispatch("coaches/loadCoaches", {
+          forceRefresh: refresh,
+        });
       } catch (err) {
         this.error = err.message;
       }

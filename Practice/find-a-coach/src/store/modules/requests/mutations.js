@@ -1,5 +1,8 @@
 export default {
-  contactCoach(state, payload) {
+  addRequest(state, payload) {
     state.requests.push(payload);
+  },
+  setRequests(state, payload) {
+    state.requests = payload;
   },
 };

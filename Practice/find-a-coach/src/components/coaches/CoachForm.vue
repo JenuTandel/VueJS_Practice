@@ -52,7 +52,7 @@
             <input
               type="checkbox"
               id="frontend"
-              value="forntend"
+              value="frontend"
               v-model="areas.val"
               @blur="clearValidity('areas')"
             />

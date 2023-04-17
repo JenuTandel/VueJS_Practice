@@ -23,7 +23,10 @@ export default {
   },
 
   //Get coaches
-  async loadCoaches(context) {
+  async loadCoaches(context, payload) {
+    if (!payload.forceRefresh && !context.getters.shouldUpdate) {
+      return;
+    }
     await axios
       .get(`https://for-a-coach-default-rtdb.firebaseio.com/coaches.json`)
       .then((response) => {
@@ -32,6 +35,7 @@ export default {
 
         for (const key in responseData) {
           const coach = {
+            id: key,
             firstName: responseData[key].firstName,
             lastName: responseData[key].lastName,
             hourlyRate: responseData[key].hourlyRate,
@@ -40,6 +44,7 @@ export default {
           coaches.push(coach);
         }
         context.commit("setCoaches", coaches);
+        context.commit("setFetchTimestamp");
       })
       .catch((err) => {
         throw err;
