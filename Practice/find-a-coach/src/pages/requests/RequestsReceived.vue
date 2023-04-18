@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="d-flex justify-content-center mt-3">
     <base-dialog :show="!!error" title="Error" @close="handleError">
       <p>{{ error }}</p>
     </base-dialog>
@@ -21,7 +21,7 @@
   </div>
 </template>
 <script>
-import RequestItem from "./RequestItem.vue";
+import RequestItem from "../../components/requests/RequestItem.vue";
 export default {
   name: "RequestReceived",
   components: { RequestItem },

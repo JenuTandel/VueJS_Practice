@@ -40,8 +40,8 @@
   </div>
 </template>
 <script>
-import CoachItems from "./CoachItems.vue";
-import CoachFilter from "./CoachFilter.vue";
+import CoachItems from "../../components/coaches/CoachItems.vue";
+import CoachFilter from "../../components/coaches/CoachFilter.vue";
 export default {
   data() {
     return {

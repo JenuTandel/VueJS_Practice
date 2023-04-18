@@ -34,13 +34,14 @@ export default {
           token: res.data.idToken,
           // tokenExpiration: res.data.expiresIn,
         };
-        const expireIn = +res.data.expireIn;
+        const expireIn = +res.data.expiresIn * 1000;
         // const expireIn = 5000;
         const expirationDate = new Date().getTime() + expireIn;
 
         localStorage.setItem("token", res.data.idToken);
         localStorage.setItem("userId", res.data.localId);
         localStorage.setItem("tokenExpiration", expirationDate);
+        localStorage.setItem("currentTime", new Date().getTime());
 
         timer = setTimeout(() => {
           context.dispatch("autoLogout");
@@ -66,6 +67,7 @@ export default {
         context.dispatch("autoLogout");
       }, expireIn);
     }
+
     if (token && userId) {
       context.commit("setUser", {
         token: token,

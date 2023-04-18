@@ -39,7 +39,7 @@ export default {
       return this.selectedCoach.areas;
     },
     rate() {
-      return this.selectedCoach.rate;
+      return this.selectedCoach.hourlyRate;
     },
   },
   created() {

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import CoachForm from "./CoachForm.vue";
+import CoachForm from "../../components/coaches/CoachForm.vue";
 export default {
   name: "CoachRegistration",
   components: {
