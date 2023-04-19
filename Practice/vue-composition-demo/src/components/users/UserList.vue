@@ -27,31 +27,55 @@
 
 <script>
 import UserItem from "./UserItem.vue";
-import { ref, watch, computed } from "vue";
+import { ref, computed, toRef } from "vue";
+import userSearch from "@/hooks/search";
 export default {
   components: { UserItem },
   props: ["users"],
   setup(props) {
-    const enteredSearchTerm = ref("");
-    const activeSearchTerm = ref("");
-    const sorting = ref(null);
-
-    const availableUsers = computed(() => {
-      const users = ref([]);
-      if (activeSearchTerm.value) {
-        users.value = props.users.filter((usr) =>
-          usr.fullName.includes(activeSearchTerm.value)
-        );
-      } else if (props.users) {
-        users.value = props.users;
-      }
-      return users.value;
+    // console.log(props.users);
+    const { users } = toRef(props);
+    const userData = computed(() => {
+      return users ? users.value : [];
     });
+    console.log(userData);
+    const { enteredSearchTerm, availableItems, updateSearch } = userSearch(
+      userData,
+      "fullName"
+    );
+    //search
+    // const enteredSearchTerm = ref("");
+    // const activeSearchTerm = ref("");
+
+    // const availableUsers = computed(() => {
+    //   const users = ref([]);
+    //   if (activeSearchTerm.value) {
+    //     users.value = props.users.filter((usr) =>
+    //       usr.fullName.includes(activeSearchTerm.value)
+    //     );
+    //   } else if (props.users) {
+    //     users.value = props.users;
+    //   }
+    //   return users.value;
+    // });
+
+    // function updateSearch(val) {
+    //   enteredSearchTerm.value = val;
+    // }
+    // watch(enteredSearchTerm, function (val) {
+    //   setTimeout(() => {
+    //     if (val === enteredSearchTerm.value) {
+    //       activeSearchTerm.value = val;
+    //     }
+    //   }, 300);
+    // });
+    //sorting
+    const sorting = ref(null);
     const displayedUsers = computed(() => {
       if (!sorting.value) {
-        return availableUsers.value;
+        return availableItems.value;
       }
-      return availableUsers.value.slice().sort((u1, u2) => {
+      return availableItems.value.slice().sort((u1, u2) => {
         if (sorting.value === "asc" && u1.fullName > u2.fullName) {
           return 1;
         } else if (sorting.value === "asc") {
@@ -63,19 +87,10 @@ export default {
         }
       });
     });
-    function updateSearch(val) {
-      enteredSearchTerm.value = val;
-    }
     function sort(mode) {
       sorting.value = mode;
     }
-    watch(enteredSearchTerm, function (val) {
-      setTimeout(() => {
-        if (val === enteredSearchTerm.value) {
-          activeSearchTerm.value = val;
-        }
-      }, 300);
-    });
+
     return { displayedUsers, updateSearch, sort, enteredSearchTerm, sorting };
   },
 };

@@ -21,45 +21,58 @@
 </template>
 
 <script>
-import { ref, computed, watch, toRef } from "vue";
+import { computed, watch, toRef } from "vue";
 import ProjectItem from "./ProjectItem.vue";
+import userSearch from "@/hooks/search";
+
 export default {
   components: {
     ProjectItem,
   },
   props: ["user"],
   setup(props) {
-    const enteredSearchTerm = ref("");
-    const activeSearchTerm = ref("");
-
-    const hasProjects = computed(() => {
-      return props.user.projects && availableProjects.value.length > 0;
-    });
-    console.log(props.user);
-    const availableProjects = computed(() => {
-      if (activeSearchTerm.value) {
-        return props.user.projects.filter((prj) =>
-          prj.title.includes(activeSearchTerm.value)
-        );
-      }
-      return props.user.projects;
-    });
-
-    function updateSearch(val) {
-      enteredSearchTerm.value = val;
-    }
     const { user } = toRef(props);
+    const projects = computed(() => {
+      return user.value ? user.value.projects : [];
+    });
+    const { enteredSearchTerm, availableItems, updateSearch } = userSearch(
+      projects,
+      "title"
+    );
+    // const enteredSearchTerm = ref("");
+    // const activeSearchTerm = ref("");
+    // console.log(props.user);
+    // const availableProjects = computed(() => {
+    //   if (activeSearchTerm.value) {
+    //     return props.user.projects.filter((prj) =>
+    //       prj.title.includes(activeSearchTerm.value)
+    //     );
+    //   }
+    //   return props.user.projects;
+    // });
+
+    // function updateSearch(val) {
+    //   enteredSearchTerm.value = val;
+    // }
+    const hasProjects = computed(() => {
+      return props.user.projects && availableItems.value.length > 0;
+    });
     watch(
-      // () => props.user,
-      user,
+      () => props.user,
+      // user,
       () => {
         console.log(props.user), (enteredSearchTerm.value = "");
       }
     );
-    watch(enteredSearchTerm, () => {
-      activeSearchTerm.value = enteredSearchTerm.value;
-    });
-    return { hasProjects, updateSearch, enteredSearchTerm, availableProjects };
+    // watch(enteredSearchTerm, () => {
+    //   activeSearchTerm.value = enteredSearchTerm.value;
+    // });
+    return {
+      hasProjects,
+      updateSearch,
+      enteredSearchTerm,
+      availableProjects: availableItems,
+    };
   },
 };
 
