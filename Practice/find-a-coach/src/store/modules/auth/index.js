@@ -11,6 +11,7 @@ export default {
       didAutoLogout: false,
     };
   },
+
   mutations,
   actions,
   getters,
