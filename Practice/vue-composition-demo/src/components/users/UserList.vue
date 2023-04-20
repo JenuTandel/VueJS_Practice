@@ -27,20 +27,25 @@
 
 <script>
 import UserItem from "./UserItem.vue";
-import { ref, computed, toRef } from "vue";
+import { computed, toRefs } from "vue";
 import userSearch from "@/hooks/search";
+import useSort from "@/hooks/sort";
 export default {
   components: { UserItem },
   props: ["users"],
   setup(props) {
     // console.log(props.users);
-    const { users } = toRef(props);
+    const { users } = toRefs(props);
     const userData = computed(() => {
       return users ? users.value : [];
     });
-    console.log(userData);
     const { enteredSearchTerm, availableItems, updateSearch } = userSearch(
       userData,
+      "fullName"
+    );
+
+    const { displayedUsers, sorting, sort } = useSort(
+      availableItems,
       "fullName"
     );
     //search
@@ -70,26 +75,26 @@ export default {
     //   }, 300);
     // });
     //sorting
-    const sorting = ref(null);
-    const displayedUsers = computed(() => {
-      if (!sorting.value) {
-        return availableItems.value;
-      }
-      return availableItems.value.slice().sort((u1, u2) => {
-        if (sorting.value === "asc" && u1.fullName > u2.fullName) {
-          return 1;
-        } else if (sorting.value === "asc") {
-          return -1;
-        } else if (sorting.value === "desc" && u1.fullName > u2.fullName) {
-          return -1;
-        } else {
-          return 1;
-        }
-      });
-    });
-    function sort(mode) {
-      sorting.value = mode;
-    }
+    // const sorting = ref(null);
+    // const displayedUsers = computed(() => {
+    //   if (!sorting.value) {
+    //     return availableItems.value;
+    //   }
+    //   return availableItems.value.slice().sort((u1, u2) => {
+    //     if (sorting.value === "asc" && u1.fullName > u2.fullName) {
+    //       return 1;
+    //     } else if (sorting.value === "asc") {
+    //       return -1;
+    //     } else if (sorting.value === "desc" && u1.fullName > u2.fullName) {
+    //       return -1;
+    //     } else {
+    //       return 1;
+    //     }
+    //   });
+    // });
+    // function sort(mode) {
+    //   sorting.value = mode;
+    // }
 
     return { displayedUsers, updateSearch, sort, enteredSearchTerm, sorting };
   },

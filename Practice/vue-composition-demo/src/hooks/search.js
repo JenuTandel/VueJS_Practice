@@ -20,6 +20,7 @@ export default function userSearch(items, searchProp) {
     enteredSearchTerm.value = val;
   }
   watch(enteredSearchTerm, function (val) {
+    console.log(val);
     setTimeout(() => {
       if (val === enteredSearchTerm.value) {
         activeSearchTerm.value = val;

@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { computed, watch, toRef } from "vue";
+import { computed, watch, toRefs } from "vue";
 import ProjectItem from "./ProjectItem.vue";
 import userSearch from "@/hooks/search";
 
@@ -31,7 +31,7 @@ export default {
   },
   props: ["user"],
   setup(props) {
-    const { user } = toRef(props);
+    const { user } = toRefs(props);
     const projects = computed(() => {
       return user.value ? user.value.projects : [];
     });
@@ -58,10 +58,11 @@ export default {
       return props.user.projects && availableItems.value.length > 0;
     });
     watch(
-      () => props.user,
+      user,
       // user,
       () => {
-        console.log(props.user), (enteredSearchTerm.value = "");
+        // (enteredSearchTerm.value = "");
+        updateSearch("");
       }
     );
     // watch(enteredSearchTerm, () => {
